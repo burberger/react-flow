@@ -304,6 +304,7 @@ export const storeModel: StoreModel = {
 
   updateNodePos: action((state, { id, pos }) => {
     let position: XYPosition = pos;
+    console.log("Updating node position");
 
     if (state.snapToGrid) {
       const [gridSizeX, gridSizeY] = state.snapGrid;
