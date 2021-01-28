@@ -48,7 +48,7 @@ const NodeRenderer = (props: NodeRendererProps) => {
         id: entry.target.getAttribute('data-id') as string,
         nodeElement: entry.target as HTMLDivElement,
       }));
-      console.warn("Firing resize observer");
+      console.warn("Firing resize observer", entries);
 
       batchUpdateNodeDimensions({ updates });
     });
