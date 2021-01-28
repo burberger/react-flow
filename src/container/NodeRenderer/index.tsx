@@ -20,6 +20,7 @@ interface NodeRendererProps {
 }
 
 const findParentNodeElement = (element: HTMLElement | null): HTMLElement | null => {
+  console.warn("Recursing to", element)
   // Base case, hit root of tree.
   if (element === null) {
     return null;
