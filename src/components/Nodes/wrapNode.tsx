@@ -177,7 +177,7 @@ export default (NodeComponent: ComponentType<NodeComponentProps>) => {
 
     useEffect(() => {
       if (nodeElement.current) {
-        const config = { attributes: true, childList: true, subtree: true };
+        const config = { attributes: false, childList: true, subtree: true };
         const currNode = nodeElement.current;
         resizeObserver?.observe(currNode);
         mutationObserver?.observe(currNode, config);

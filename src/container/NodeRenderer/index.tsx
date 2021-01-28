@@ -61,6 +61,15 @@ const NodeRenderer = (props: NodeRendererProps) => {
 
     return new MutationObserver((entries) => {
       console.warn("Saw mutation event on entries", entries);
+      const updates = entries.map((entry) => {
+        let parentElement = entry.target.parentElement;
+        return {
+          id: parentElement?.getAttribute('data-id') as string,
+          nodeElement: parentElement as HTMLDivElement,
+        }
+      });
+
+      batchUpdateNodeDimensions({ updates });
     });
   }, []);
 
