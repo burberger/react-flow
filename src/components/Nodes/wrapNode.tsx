@@ -177,11 +177,15 @@ export default (NodeComponent: ComponentType<NodeComponentProps>) => {
 
     useEffect(() => {
       if (nodeElement.current) {
+        const config = { attributes: true, childList: true, subtree: true };
         const currNode = nodeElement.current;
         resizeObserver?.observe(currNode);
-        mutationObserver?.observe(currNode);
+        mutationObserver?.observe(currNode, config);
 
-        return () => resizeObserver?.unobserve(currNode);
+        return () => {
+          resizeObserver?.unobserve(currNode);
+          mutationObserver?.disconnect();
+        }
       }
 
       return;
