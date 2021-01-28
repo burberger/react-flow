@@ -19,6 +19,21 @@ interface NodeRendererProps {
   onlyRenderVisibleElements: boolean;
 }
 
+const findParentNodeElement = (element: HTMLElement | null): HTMLElement | null => {
+  // Base case, hit root of tree.
+  if (element === null) {
+    return null;
+  }
+
+  // Base case, hit target parent with ID.
+  if (element.getAttribute('data-id') !== null) {
+    return element;
+  }
+
+  // Recurse until we either find the parent or hit the root of the tree.
+  return findParentNodeElement(element);
+}
+
 const NodeRenderer = (props: NodeRendererProps) => {
   const transform = useStoreState((state) => state.transform);
   const selectedElements = useStoreState((state) => state.selectedElements);
@@ -62,7 +77,7 @@ const NodeRenderer = (props: NodeRendererProps) => {
     return new MutationObserver((entries) => {
       console.warn("Saw mutation event on entries", entries);
       const updates = entries.map((entry) => {
-        let parentElement = entry.target.parentElement;
+        let parentElement = findParentNodeElement(entry.target.parentElement);
         return {
           id: parentElement?.getAttribute('data-id') as string,
           nodeElement: parentElement as HTMLDivElement,
