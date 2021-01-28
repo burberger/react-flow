@@ -39,6 +39,15 @@ type NodeDimensionUpdates = {
   updates: NodeDimensionUpdate[];
 };
 
+type HandleUpdate = {
+  id: ElementId;
+  nodeElement: HTMLDivElement;
+}
+
+type HandleUpdates = {
+  updates: HandleUpdate[];
+}
+
 type InitD3Zoom = {
   d3Zoom: ZoomBehavior<Element, unknown>;
   d3Selection: D3Selection<Element, unknown, null, undefined>;
@@ -99,7 +108,7 @@ export interface StoreModel {
 
   setElements: Action<StoreModel, Elements>;
 
-  batchUpdateHandles: Action<StoreModel, NodeDimensionUpdates>;
+  batchUpdateHandles: Action<StoreModel, HandleUpdates>;
 
   batchUpdateNodeDimensions: Action<StoreModel, NodeDimensionUpdates>;
   updateNodeDimensions: Action<StoreModel, NodeDimensionUpdate>;
