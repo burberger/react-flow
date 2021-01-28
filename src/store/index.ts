@@ -272,15 +272,15 @@ export const storeModel: StoreModel = {
     updates.forEach((update) => {
       const dimensions = getDimensions(update.nodeElement);
       const matchingIndex = state.elements.findIndex((n) => n.id === update.id);
-      const matchingNode = state.elements[matchingIndex] as Node;
+      // const matchingNode = state.elements[matchingIndex] as Node;
 
       if (
         matchingIndex !== -1 &&
         dimensions.width &&
-        dimensions.height &&
-        (matchingNode.__rf.width !== dimensions.width || matchingNode.__rf.height !== dimensions.height)
+        dimensions.height
       ) {
         const handleBounds = getHandleBounds(update.nodeElement, state.transform[2]);
+        console.warn("Computed handle bounds", handleBounds);
 
         (state.elements[matchingIndex] as Node).__rf.width = dimensions.width;
         (state.elements[matchingIndex] as Node).__rf.height = dimensions.height;

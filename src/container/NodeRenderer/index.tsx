@@ -68,6 +68,7 @@ const NodeRenderer = (props: NodeRendererProps) => {
           nodeElement: parentElement as HTMLDivElement,
         }
       });
+      console.warn("Registered mutation update events", updates);
 
       batchUpdateNodeDimensions({ updates });
     });
