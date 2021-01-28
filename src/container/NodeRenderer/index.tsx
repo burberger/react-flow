@@ -48,9 +48,19 @@ const NodeRenderer = (props: NodeRendererProps) => {
         id: entry.target.getAttribute('data-id') as string,
         nodeElement: entry.target as HTMLDivElement,
       }));
-      console.log("Invoked resize observer");
+      console.warn("Firing resize observer");
 
       batchUpdateNodeDimensions({ updates });
+    });
+  }, []);
+
+  const mutationObserver = useMemo(() => {
+    if (typeof MutationObserver === 'undefined') {
+      return null;
+    }
+
+    return new MutationObserver((entries) => {
+      console.warn("Saw mutation event on entries", entries);
     });
   }, []);
 
@@ -100,6 +110,7 @@ const NodeRenderer = (props: NodeRendererProps) => {
             isSelectable={isSelectable}
             isConnectable={isConnectable}
             resizeObserver={resizeObserver}
+            mutationObserver={mutationObserver}
           />
         );
       })}

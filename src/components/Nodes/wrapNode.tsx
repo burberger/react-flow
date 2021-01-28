@@ -37,6 +37,7 @@ export default (NodeComponent: ComponentType<NodeComponentProps>) => {
     snapGrid,
     isDragging,
     resizeObserver,
+    mutationObserver,
   }: WrapNodeProps) => {
     const updateNodeDimensions = useStoreActions((actions) => actions.updateNodeDimensions);
     const addSelectedElements = useStoreActions((actions) => actions.addSelectedElements);
@@ -178,6 +179,7 @@ export default (NodeComponent: ComponentType<NodeComponentProps>) => {
       if (nodeElement.current) {
         const currNode = nodeElement.current;
         resizeObserver?.observe(currNode);
+        mutationObserver?.observe(currNode);
 
         return () => resizeObserver?.unobserve(currNode);
       }
