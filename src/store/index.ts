@@ -1,33 +1,33 @@
-import { Action, action, computed, Computed, createStore, Thunk, thunk } from 'easy-peasy';
+import { createStore, Action, action, Thunk, thunk, computed, Computed } from 'easy-peasy';
 import isEqual from 'fast-deep-equal';
 import { Selection as D3Selection, ZoomBehavior } from 'd3';
 
 import { clampPosition, getDimensions } from '../utils';
-import { getConnectedEdges, getNodesInside, getRectOfNodes, isEdge, isNode, parseElement } from '../utils/graph';
+import { getNodesInside, getConnectedEdges, getRectOfNodes, isNode, isEdge, parseElement } from '../utils/graph';
 import { getHandleBounds } from '../components/Nodes/utils';
 
 import {
-  ConnectionMode,
-  Dimensions,
-  Edge,
   ElementId,
   Elements,
-  HandleType,
+  Transform,
   Node,
-  NodeDiffUpdate,
-  NodeExtent,
-  NodePosUpdate,
-  OnConnectEndFunc,
+  Edge,
+  Rect,
+  Dimensions,
+  XYPosition,
   OnConnectFunc,
   OnConnectStartFunc,
   OnConnectStopFunc,
-  Rect,
+  OnConnectEndFunc,
   SelectionRect,
+  HandleType,
   SetConnectionId,
-  SnapGrid,
-  Transform,
+  NodePosUpdate,
+  NodeDiffUpdate,
   TranslateExtent,
-  XYPosition,
+  SnapGrid,
+  ConnectionMode,
+  NodeExtent,
 } from '../types';
 
 type NodeDimensionUpdate = {
@@ -273,7 +273,9 @@ export const storeModel: StoreModel = {
   batchUpdateHandles: action((state, { updates }) => {
     updates.forEach((update) => {
       const matchingIndex = state.elements.findIndex((n) => n.id === update.id);
-      (state.elements[matchingIndex] as Node).__rf.handleBounds = getHandleBounds(update.nodeElement, state.transform[2]);
+      const handleBounds = getHandleBounds(update.nodeElement, state.transform[2]);
+
+      (state.elements[matchingIndex] as Node).__rf.handleBounds = handleBounds;
     });
   }),
 
