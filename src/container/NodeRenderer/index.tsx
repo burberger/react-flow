@@ -43,6 +43,7 @@ const NodeRenderer = (props: NodeRendererProps) => {
   const viewportBox = useStoreState((state) => state.viewportBox);
   const nodes = useStoreState((state) => state.nodes);
   const batchUpdateNodeDimensions = useStoreActions((actions) => actions.batchUpdateNodeDimensions);
+  const batchUpdateHandles = useStoreActions((actions) => actions.batchUpdateHandles);
 
   const visibleNodes = props.onlyRenderVisibleElements ? getNodesInside(nodes, viewportBox, transform, true) : nodes;
 
@@ -63,7 +64,6 @@ const NodeRenderer = (props: NodeRendererProps) => {
         id: entry.target.getAttribute('data-id') as string,
         nodeElement: entry.target as HTMLDivElement,
       }));
-      console.warn("Firing resize observer", entries);
 
       batchUpdateNodeDimensions({ updates });
     });
@@ -83,9 +83,8 @@ const NodeRenderer = (props: NodeRendererProps) => {
           nodeElement: parentElement as HTMLDivElement,
         }
       });
-      console.warn("Registered mutation update events", updates);
 
-      batchUpdateNodeDimensions({ updates });
+      batchUpdateHandles({ updates });
     });
   }, []);
 

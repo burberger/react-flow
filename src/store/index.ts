@@ -1,33 +1,33 @@
-import { createStore, Action, action, Thunk, thunk, computed, Computed } from 'easy-peasy';
+import { Action, action, computed, Computed, createStore, Thunk, thunk } from 'easy-peasy';
 import isEqual from 'fast-deep-equal';
 import { Selection as D3Selection, ZoomBehavior } from 'd3';
 
 import { clampPosition, getDimensions } from '../utils';
-import { getNodesInside, getConnectedEdges, getRectOfNodes, isNode, isEdge, parseElement } from '../utils/graph';
+import { getConnectedEdges, getNodesInside, getRectOfNodes, isEdge, isNode, parseElement } from '../utils/graph';
 import { getHandleBounds } from '../components/Nodes/utils';
 
 import {
+  ConnectionMode,
+  Dimensions,
+  Edge,
   ElementId,
   Elements,
-  Transform,
+  HandleType,
   Node,
-  Edge,
-  Rect,
-  Dimensions,
-  XYPosition,
+  NodeDiffUpdate,
+  NodeExtent,
+  NodePosUpdate,
+  OnConnectEndFunc,
   OnConnectFunc,
   OnConnectStartFunc,
   OnConnectStopFunc,
-  OnConnectEndFunc,
+  Rect,
   SelectionRect,
-  HandleType,
   SetConnectionId,
-  NodePosUpdate,
-  NodeDiffUpdate,
-  TranslateExtent,
   SnapGrid,
-  ConnectionMode,
-  NodeExtent,
+  Transform,
+  TranslateExtent,
+  XYPosition,
 } from '../types';
 
 type NodeDimensionUpdate = {
@@ -98,6 +98,8 @@ export interface StoreModel {
   setOnConnectEnd: Action<StoreModel, OnConnectEndFunc>;
 
   setElements: Action<StoreModel, Elements>;
+
+  batchUpdateHandles: Action<StoreModel, NodeDimensionUpdates>;
 
   batchUpdateNodeDimensions: Action<StoreModel, NodeDimensionUpdates>;
   updateNodeDimensions: Action<StoreModel, NodeDimensionUpdate>;
@@ -268,19 +270,26 @@ export const storeModel: StoreModel = {
     });
   }),
 
+  batchUpdateHandles: action((state, { updates }) => {
+    updates.forEach((update) => {
+      const matchingIndex = state.elements.findIndex((n) => n.id === update.id);
+      (state.elements[matchingIndex] as Node).__rf.handleBounds = getHandleBounds(update.nodeElement, state.transform[2]);
+    });
+  }),
+
   batchUpdateNodeDimensions: action((state, { updates }) => {
     updates.forEach((update) => {
       const dimensions = getDimensions(update.nodeElement);
       const matchingIndex = state.elements.findIndex((n) => n.id === update.id);
-      // const matchingNode = state.elements[matchingIndex] as Node;
+      const matchingNode = state.elements[matchingIndex] as Node;
 
       if (
         matchingIndex !== -1 &&
         dimensions.width &&
-        dimensions.height
+        dimensions.height &&
+        (matchingNode.__rf.width !== dimensions.width || matchingNode.__rf.height !== dimensions.height)
       ) {
         const handleBounds = getHandleBounds(update.nodeElement, state.transform[2]);
-        console.warn("Computed handle bounds", handleBounds);
 
         (state.elements[matchingIndex] as Node).__rf.width = dimensions.width;
         (state.elements[matchingIndex] as Node).__rf.height = dimensions.height;
