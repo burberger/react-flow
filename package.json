@@ -1,6 +1,6 @@
 {
   "name": "react-flow-renderer",
-  "version": "8.7.0",
+  "version": "8.6.0",
   "main": "dist/ReactFlow.js",
   "module": "dist/ReactFlow.esm.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,8 @@
     "cy:open": "cypress open",
     "release": "npm run test && release-it",
     "release:notest": "release-it",
-    "release:next": "release-it --preRelease=next"
+    "release:next": "release-it --preRelease=next",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
