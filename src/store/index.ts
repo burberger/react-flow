@@ -108,6 +108,7 @@ export interface StoreModel {
 
   setElements: Action<StoreModel, Elements>;
 
+  updateHandles: Action<StoreModel, HandleUpdate>;
   batchUpdateHandles: Action<StoreModel, HandleUpdates>;
 
   batchUpdateNodeDimensions: Action<StoreModel, NodeDimensionUpdates>;
@@ -277,6 +278,13 @@ export const storeModel: StoreModel = {
         state.elements.push(parseElement(el, state.nodeExtent));
       }
     });
+  }),
+
+  updateHandles: action((state, {id, nodeElement}) => {
+    const matchingIndex = state.elements.findIndex((n) => n.id === id);
+    const handleBounds = getHandleBounds(nodeElement, state.transform[2]);
+
+    (state.elements[matchingIndex] as Node).__rf.handleBounds = handleBounds;
   }),
 
   batchUpdateHandles: action((state, { updates }) => {
