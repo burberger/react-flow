@@ -285,7 +285,6 @@ export const storeModel: StoreModel = {
     const handleBounds = getHandleBounds(nodeElement, state.transform[2]);
 
     (state.elements[matchingIndex] as Node).__rf.handleBounds = handleBounds;
-    console.warn(handleBounds);
   }),
 
   batchUpdateHandles: action((state, { updates }) => {

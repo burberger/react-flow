@@ -17,7 +17,6 @@ export const getHandleBoundsByHandleType = (
   k: number
 ): HandleElement[] | null => {
   const handles = nodeElement.querySelectorAll(selector);
-  console.warn("Handles", handles)
 
   if (!handles || !handles.length) {
     return null;
